@@ -31,25 +31,21 @@ public class HttpDoc {
     private String cookies;
     public static CloseableHttpClient client = HttpClients.createDefault();
 
-    public void setNetWid(String url, Map<String, Object> mLoginInfo)
-            throws Exception {
+    public void setNetWid() {
         try {
             client.close();
             client      = null;
             client      = HttpClients.createDefault();
-            String page = GetPageContent(url);
-            List<NameValuePair> postParams = getFormParams(page, mLoginInfo);
-            sendPost("http://con.toolpark.kr/uat/uia/actionSecurityLogin.do", postParams);
         }catch(Exception e){
             System.out.println( " setNet valuerrr : " +e.getMessage());
 
         }
     }
-    private void sendPost(String url, List<NameValuePair> postParams)
+    public BufferedReader sendPost(String url, List<NameValuePair> postParams)
             throws Exception {
 
         HttpPost post = new HttpPost(url);
-        post.setHeader("Referer", "http://con.toolpark.kr/mng/login.do");
+        post.setHeader("Referer", "http://toolpark.kr");
         post.setEntity(new UrlEncodedFormEntity(postParams));
 
         CloseableHttpResponse response = client.execute(post);
@@ -69,14 +65,9 @@ public class HttpDoc {
         System.out.println("\nSending2 'POST' request to URL : " + url);
         System.out.println("Post parameters : " + postParams);
         System.out.println("Response Code : " + responseCode);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ( (line = rd.readLine()) != null ) {
-            result.append(line);
-        }
-        System.out.println(result.toString());
-        GetPageContent("http://con.toolpark.kr");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "EUC-KR"));
+
+        return rd;
     }
     public List<NameValuePair> getFormParams(String html, Map<String, Object> mLoginInfo)
             throws UnsupportedEncodingException {
@@ -104,7 +95,7 @@ public class HttpDoc {
     public String GetPageContent(String url) throws Exception {
         try {
             HttpGet request = new HttpGet(url);
-            request.setHeader("Host", "con.toolpark.kr/mng/login.do");
+            request.setHeader("Host",  "con.toolpark.kr");
             request.setHeader("User-Agent", UserAgent);
             request.setHeader("Accept", "text/html,application/xhtml+xml");
             request.setHeader("Accept-Language", "ko-KR");
@@ -129,97 +120,10 @@ public class HttpDoc {
             return null;
         }
     }
-    private String GetPageContentLogin(String url) throws Exception {
-        try {
-            HttpGet request = new HttpGet(url);
-            request.setHeader("Host", "toolmon.toolpark.kr");
-            request.setHeader("User-Agent", UserAgent);
-            request.setHeader("Accept", "*/*");
-            request.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            request.setHeader("Accept-Language", "ko-KR");
-            try{
-                for(int k=0;k<dCookie.length;k++){
-                    if(! dCookie[k].equals(null)){
-                        System.out.println("Cookie:"+ dCookie[k]);
-                        request.setHeader("Cookie", dCookie[k]);
-                    }else{
-                        break;
-                    }
-                }
-            }catch(Exception e){
-                System.out.println( " sss : " +e.getMessage());
-            }
-            request.setHeader("Connection", "keep-alive");
-            request.setHeader("Referer", "http://tnet.kb-one.co.kr/member/login");
-            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
-            HttpResponse response = client.execute(request);
-            Header[] headers = response.getAllHeaders();
-
-            BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(response.getEntity().getContent(),"UTF-8"));
-
-            StringBuffer result = new StringBuffer();
-            String line = "";
-
-            while ((line = rd.readLine()) != null) {
-                result.append(line);
-            }
-            return result.toString();
-        }catch(Exception e){
-            System.out.println( " valuerrr : " +e.getMessage());
-            return null;
-        }
-    }
     public void reClient() throws Exception {
         client.close();
         client      = null;
         client      = HttpClients.createDefault();
-    }
-    public void crtImageAtti(String url, Item item) {
-        InputStream is       = null;
-        FileOutputStream fos = null;
-        try {
-            reClient();
-            String mkFolder = "";
-            HttpGet httpget = new HttpGet("http:"+ url);
-            HttpResponse response = client.execute(httpget);
-            HttpEntity entity     = response.getEntity();
-            String[] sP=url.split("/");
-            File desti = new File(mkFolder);
-            if (!desti.exists()) {
-                desti.mkdirs();
-            }
-            is = entity.getContent();
-            String filePath = mkFolder;
-
-            filePath    = filePath + sP[sP.length - 1];
-            File destis = new File(filePath);
-            if (!destis.exists()) {
-                fos = new FileOutputStream(new File(filePath));
-                int inByte;
-                while ((inByte = is.read()) != -1) {
-                    fos.write(inByte);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            if (fos != null) {
-                try {
-
-                    fos.close();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }
     }
     public void cate() throws Exception{}
     public void item() throws Exception{}
