@@ -21,25 +21,35 @@ import java.util.Map;
  */
 public class BatchJob {
     public static void main(String[] arg) throws Exception {
+        ItemInfo();
+    }
+    private static Map loginInfo() {
         Map mLoginInfo = new HashMap<String, Object>();
         mLoginInfo.put("idName", "id");
         mLoginInfo.put("pwName", "password");
         mLoginInfo.put("id", "admin");
         mLoginInfo.put("pw", "1111");
+        return mLoginInfo;
+    }
+
+    private static void ItemInfo() throws Exception {
+        Map mLoginInfo = loginInfo();
 
         CretecDoc cretecDoc = new CretecDoc("con");
         cretecDoc.Login(mLoginInfo);
-        BufferedReader bufferedReader = cretecDoc.getCsvData();
+        BufferedReader bufferedReader = cretecDoc.getCsvItemData();
         StringBuffer resultSb = new StringBuffer();
         String line = "";
 
         while ( (line = bufferedReader.readLine()) != null ) {
             Item item = new Item();
-
             resultSb.append(line);
-            System.out.println(line.toString());
         }
+    }
+    private static void cateInfo() throws Exception {
+        Map mLoginInfo = loginInfo();
 
     }
+
 }
 

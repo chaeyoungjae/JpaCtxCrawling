@@ -33,8 +33,7 @@ public class CretecDoc extends HttpDoc {
         String[] token = resultSb.toString().split("/");
         GetPageContent("http://" + domain + ".toolpark.kr/uat/uia/jsecurity_check.do?id=" + token[1] + "&pass=" + token[2]);
     }
-
-    public BufferedReader getCsvData() throws Exception {
+    public BufferedReader getCsvItemData() throws Exception {
         String GoodData = GetPageContent("http://" + domain + ".toolpark.kr/Admin/Goods.do");
         Document doc = Jsoup.parse(GoodData);
         Element loginform = doc.getElementsByTag("form").get(2);
