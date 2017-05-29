@@ -2,6 +2,7 @@ package ctx;
 
 import ctx.crawling.CretecDoc;
 import ctx.crawling.HttpDoc;
+import ctx.domain.Category;
 import ctx.domain.Item;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,7 +22,8 @@ import java.util.Map;
  */
 public class BatchJob {
     public static void main(String[] arg) throws Exception {
-        ItemInfo();
+        //ItemInfo();
+        cateInfo();
     }
     private static Map loginInfo() {
         Map mLoginInfo = new HashMap<String, Object>();
@@ -43,12 +45,20 @@ public class BatchJob {
 
         while ( (line = bufferedReader.readLine()) != null ) {
             Item item = new Item();
-            resultSb.append(line);
+            item.convert(line);
         }
     }
     private static void cateInfo() throws Exception {
         Map mLoginInfo = loginInfo();
+        CretecDoc cretecDoc = new CretecDoc("con");
+        cretecDoc.Login(mLoginInfo);
+        BufferedReader bufferedReader = cretecDoc.getCsvCateData();
+        String line = "";
 
+        while ( (line = bufferedReader.readLine()) != null ) {
+            Category  cate = new Category();
+            cate.convert(line);
+        }
     }
 
 }

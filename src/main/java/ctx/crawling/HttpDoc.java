@@ -93,6 +93,9 @@ public class HttpDoc {
         return paramList;
     }
     public String GetPageContent(String url) throws Exception {
+        return GetPageContent(url, "UTF-8");
+    }
+    public String GetPageContent(String url, String encd) throws Exception {
         try {
             HttpGet request = new HttpGet(url);
             request.setHeader("Host",  "con.toolpark.kr");
@@ -106,7 +109,7 @@ public class HttpDoc {
             int responseCode = response.getStatusLine().getStatusCode();
             Header[] headers = response.getAllHeaders();
             BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(response.getEntity().getContent(),"UTF-8"));
+                    new InputStreamReader(response.getEntity().getContent(), encd));
 
             StringBuffer result = new StringBuffer();
             String line = "";
@@ -115,6 +118,27 @@ public class HttpDoc {
                 result.append(line);
             }
             return result.toString();
+        } catch ( Exception e ) {
+            System.out.println( " valuerrr : " +e.getMessage());
+            return null;
+        }
+    }
+    public BufferedReader GetPageContentBuffer(String url, String encd) throws Exception {
+        try {
+            HttpGet request = new HttpGet(url);
+            request.setHeader("Host",  "con.toolpark.kr");
+            request.setHeader("User-Agent", UserAgent);
+            request.setHeader("Accept", "text/html,application/xhtml+xml");
+            request.setHeader("Accept-Language", "ko-KR");
+            request.setHeader("Connection", "keep-alive");
+            request.setHeader("Referer", "http://tnet.kb-one.co.kr/member/login");
+            request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+            HttpResponse response = client.execute(request);
+            int responseCode = response.getStatusLine().getStatusCode();
+            Header[] headers = response.getAllHeaders();
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), encd));
+            return rd;
         } catch ( Exception e ) {
             System.out.println( " valuerrr : " +e.getMessage());
             return null;

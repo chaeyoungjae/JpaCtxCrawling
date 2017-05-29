@@ -65,4 +65,7 @@ public class CretecDoc extends HttpDoc {
         return sendPost("http://" + domain + ".toolpark.kr/Admin/GoodsExcel.do", paramList);
 
     }
+    public BufferedReader getCsvCateData() throws Exception {
+        return GetPageContentBuffer("http://" + domain + ".toolpark.kr/Admin/GoodsCate.do", "EUC-KR");
+    }
 }

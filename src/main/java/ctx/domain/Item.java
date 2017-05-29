@@ -64,7 +64,7 @@ public class Item {
     private List<Item> relationItem;            // 관련상품
     private List<MetaInfo> metaInfos;           // 메타정보
 
-    public void convertItem(String line) {
+    public void convert(String line) {
         String[] aItem = line.split(",");
         if ( aItem.length > 0 ) {
             this.id = aItem[0];
