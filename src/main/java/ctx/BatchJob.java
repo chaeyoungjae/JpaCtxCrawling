@@ -11,6 +11,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class BatchJob {
     public static void main(String[] arg) throws Exception {
         //ItemInfo();
-        cateInfo();
+        //cateInfo();
     }
     private static Map loginInfo() {
         Map mLoginInfo = new HashMap<String, Object>();

@@ -1,12 +1,21 @@
 package ctx.domain;
 
+import org.hibernate.annotations.Tables;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
  * Created by chaester on 2017-05-10.
  */
+@Entity
+@Table(name="item")
 public class Item {
+    @Id
     private String  id;
+
     private String  prod_cd;                    // 상품코드
     private String  pname;                      // 실제 제품명
     private String  nickName;                   // 변경 제품명

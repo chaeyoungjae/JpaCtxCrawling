@@ -87,12 +87,11 @@
             <version>${hibernate.version}</version>
         </dependency>
 
-        <!-- H2 데이터베이스 -->
+        <!-- 마리아 디비 -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2db.version}</version>
-            <scope>runtime</scope>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>1.1.7</version>
         </dependency>
 
         <!-- 커넥션 풀 -->
