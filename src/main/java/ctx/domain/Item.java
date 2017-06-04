@@ -1,21 +1,19 @@
 package ctx.domain;
-
-import org.hibernate.annotations.Tables;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.List;
+import javax.persistence.*;
 
 /**
  * Created by chaester on 2017-05-10.
  */
 @Entity
+@org.hibernate.annotations.DynamicUpdate
 @Table(name="item")
 public class Item {
     @Id
+    @Column(name="item_id")
     private String  id;
-
+    @ManyToOne
+    @JoinColumn(name="item_master_id")
+    private ItemMaster master;                  // 대표 상품군
     private String  prod_cd;                    // 상품코드
     private String  pname;                      // 실제 제품명
     private String  nickName;                   // 변경 제품명
@@ -25,17 +23,12 @@ public class Item {
     private Integer normal_price;               // 할인전 가격
     private String  image_link;                 // 대표 이미지
     private String  add_image_link;             // 구분자 |
-    private String  category_id1;               // 대분류 (제휴사 카테고리명)
-    private String  category_id2;               // 중분류 (제휴사 카테고리명)
-    private String  category_id3;               // 소분류 (제휴사 카테고리명)
-    private String  category_id4;               // 세분류 (제휴사 카테고리명)
-    private String  category1;                  // 대분류 (제휴사 카테고리명)
-    private String  category2;                  // 중분류 (제휴사 카테고리명)
-    private String  category3;                  // 소분류 (제휴사 카테고리명)
-    private String  category4;                  // 세분류 (제휴사 카테고리명)
+    @ManyToOne
+    @JoinColumn(name="cate_id")
+    private Category category;                  // 카테고리
     private String  naver_category;             // 네이버카테고리
     private String  naver_product_id;           // 가격비고 페이지 ID
-    private String  condition;                  // 상품상태 (신상품/중고/리퍼/전시/반품/스크래치)
+    private String  condition_h;                // 상품상태 (신상품/중고/리퍼/전시/반품/스크래치)
     private String  import_flag;                // 해외구매대행 여부
     private String  paralel_import;             // 병행수입 여부
     private String  order_made;                 // 주문제작 상품여부
@@ -70,12 +63,28 @@ public class Item {
     private String  gender;                     // 성별
     private String  use_yn;                     // 노출여부
     private String  soldout_yn;                 // 품절여부
+/*
     private List<Item> relationItem;            // 관련상품
     private List<MetaInfo> metaInfos;           // 메타정보
+*/
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        if (this.category != null) this.category.getItems().remove(this);
+        this.category = category;
+        category.getItems().add(this);
+    }
 
     public void convert(String line) {
         String[] aItem = line.split(",");
-        if ( aItem.length > 0 ) {
+        if ( aItem.length > 0
+                && Integer.parseInt(aItem[12]) > 10
+                && Integer.parseInt(aItem[13]) > 10
+                && Integer.parseInt(aItem[14]) > 10
+        ) {
             this.id = aItem[0];
             this.prod_cd      = aItem[1].replace("-", "");
             this.use_yn       = aItem[2];
@@ -100,18 +109,18 @@ public class Item {
                 for ( String data : Meta ) {
                     MetaInfo metaInfo = new MetaInfo();
                     String[] datas = data.split("_");
-                    metaInfo.setId(datas[0]);
+//                    metaInfo.setId(datas[0]);
                     metaInfo.setName(datas[1]);
-                    this.metaInfos.add(metaInfo);
+//                    this.metaInfos.add(metaInfo);
                 }
             }
             add_image_link = aItem[27];
             if ( aItem[29] != null && !aItem[29].equals("") ) {
                 String[] cates = aItem[29].split("_");
-                this.category_id1 = cates[0];
-                this.category_id2 = cates[1];
-                this.category_id3 = cates[2];
-                this.category_id4 = cates[3];
+                this.category.setCategoryL(cates[0]);
+                this.category.setCategoryM(cates[1]);
+                this.category.setCategoryS(cates[2]);
+                this.category.setCategorySS(cates[3]);
             }
             this.orgin = aItem[30];
         }

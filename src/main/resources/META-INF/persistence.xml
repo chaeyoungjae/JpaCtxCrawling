@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+    <persistence-unit name="myJob">
+        <properties>
+            <property name="javax.persistence.jdbc.driver"   value="org.mariadb.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user"     value="root"/>
+            <property name="javax.persistence.jdbc.password" value="codudwo1"/>
+            <property name="javax.persistence.jdbc.url"      value="jdbc:mariadb://chaester.vps.phps.kr:3306/NextShopping"/>
+            <property name="hibernate.dialect"               value="org.hibernate.dialect.MySQLDialect"/>
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.new_generator_mappings" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="maxPoolSize" value="25" />
+            <property name="minPoolSize" value="10" />
+            <property name="maxStatements" value="100" />
+            <property name="testConnectionOnCheckout" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
